@@ -36,6 +36,9 @@ public class LobbyService {
         if (lobbyState.getPlayerA() != null && lobbyState.getPlayerB() != null) {
             throw new HttpException(HttpStatus.BAD_REQUEST, "Can not assign player. The lobby is full.");
         }
+        if (lobbyState.getPlayerA() != null && lobbyState.getPlayerA().getUuid().equals(player.getUuid())) {
+            throw new HttpException(HttpStatus.BAD_REQUEST, "This player has already been assigned to the game");
+        }
         if (lobbyState.getPlayerA() == null) {
             lobbyState.setPlayerA(player);
         } else {

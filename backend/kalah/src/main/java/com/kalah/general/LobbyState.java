@@ -34,6 +34,10 @@ public class LobbyState {
         Arrays.fill(pits, PIT_INITIAL_STONES);
         pits[PIT_SCORE_A_POS] = 0;
         pits[PIT_SCORE_B_POS] = 0;
+        playerMove = PlayerMove.PLAYER_A;
+        gameActive = true;
+        playerA = null;
+        playerB = null;
     }
 
 }

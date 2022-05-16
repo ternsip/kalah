@@ -5,6 +5,7 @@ import com.kalah.general.Player;
 import com.kalah.service.LobbyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ public class LobbyController {
 		return UUID.randomUUID();
 	}
 
-	@GetMapping("/lobby-reset")
+	@PostMapping("/lobby-reset")
 	public LobbyState lobbyReset() {
 		lobbyService.resetLobbyState();
 		return lobbyService.getLobbyState();
@@ -32,7 +33,7 @@ public class LobbyController {
 		return lobbyService.getLobbyState();
 	}
 
-	@GetMapping("/player-move")
+	@PostMapping("/player-move")
 	public LobbyState playerMove(
 			@RequestParam(name = "playerUUID") UUID playerUUID,
 			@RequestParam(name = "pitIndex") Integer pitIndex
@@ -42,7 +43,7 @@ public class LobbyController {
 		return lobbyService.getLobbyState();
 	}
 
-	@GetMapping("/assign-player")
+	@PostMapping("/assign-player")
 	public LobbyState assignPlayer(
 			@RequestParam(name = "playerUUID") UUID playerUUID,
 			@RequestParam(name = "playerName") String playerName

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Kalah Backend</title>
+</head>
+<body>
+
+Welcome to Kalah backend index page!
+<br>
+<a href="/swagger-ui/">Link to swagger</a>
+<br>
+<br>
+<button type="button" onclick="resetLobby()">RESET LOBBY</button>
+<br>
+<br>
+<label for="player-name">Nickname: </label>
+<input type="text" id="player-name" name="name" required minlength="1" maxlength="64" size="30">
+<br>
+<br>
+<button type="button" onclick="assignPlayer()">CONNECT TO THE GAME</button>
+
+<br>
+<br>
+<br>
+<br>
+
+<table align="center" cellspacing="0 cellpadding=" style="border:1px solid #CCC; background:#EEE; border-radius:8px; transform: scale(2.5);">
+    <tbody>
+        <tr>
+            <td rowspan="2" align="center">
+                <img onclick="makeMove(13);" id="pit13" alt="Store (0)" src="http://localhost:8080/image?name=pit-0" decoding="async" width="32" height="32"  data-file-width="256" data-file-height="256">
+            </td>
+            <td><img onclick="makeMove(12);" id="pit12" alt="0" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td><img onclick="makeMove(11);" id="pit11" alt="2" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td><img onclick="makeMove(10);" id="pit10" alt="1" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td><img onclick="makeMove(9);" id="pit9" alt="2" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td><img onclick="makeMove(8);" id="pit8" alt="3" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td><img onclick="makeMove(7);" id="pit7" alt="5" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td rowspan="2" align="center"><img onclick="makeMove(6);" id="pit6" alt="Store (0)" src="http://localhost:8080/image?name=pit-0" decoding="async" width="32" height="32"  data-file-width="256" data-file-height="256"></a>
+            </td>
+        </tr>
+        <tr>
+            <td><img onclick="makeMove(0);" id="pit0"  alt="4" src="http://localhost:8080/image?name=pit-5" decoding="async" width="25" height="25" data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td><img onclick="makeMove(1);" id="pit1" alt="3" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td><img onclick="makeMove(2);" id="pit2" alt="0" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td><img onclick="makeMove(3);" id="pit3" alt="1" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td><img onclick="makeMove(4);" id="pit4" alt="2h" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+            <td><img onclick="makeMove(5);" id="pit5" alt="2" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+
+    const PIT_LINE_SIZE = 6;
+    const PITS_TOTAL = PIT_LINE_SIZE * 2 + 2;
+    const PIT_SCORE_A_POS = PIT_LINE_SIZE;
+    const PIT_SCORE_B_POS = PIT_LINE_SIZE * 2 + 1;
+    const PIT_INITIAL_STONES = 6; // 6, 5, 4, or 3
+
+    function httpSend(method, url, data, parameters) {
+        var xmlHttp = new XMLHttpRequest();
+        var paramsLine = parameters == null ? '' : ('?' + new URLSearchParams(parameters).toString());
+        xmlHttp.open(method, url + paramsLine, false); // false for synchronous request
+        xmlHttp.setRequestHeader("Content-Type", "application/json");
+        xmlHttp.send(data);
+        return xmlHttp.responseText;
+    }
+
+    function generateUUID() {
+      return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
+    }
+
+    var playerUUID = generateUUID();
+    var playerName = 'player-' + Math.floor(100 * Math.random());
+    document.getElementById("player-name").value = playerName;
+
+    function assignPlayer() {
+        playerName = document.getElementById("player-name").value;
+        var playerJson = JSON.stringify({ "playerUUID": playerUUID });
+        var state = httpSend("POST", "/assign-player", null, { 'playerUUID': playerUUID, 'playerName': playerName });
+        console.log(state);
+    }
+
+    function resetLobby() {
+        var state = httpSend("POST", "/lobby-reset", null, null);
+        console.log(state);
+    }
+
+    function makeMove(position) {
+       var state = httpSend("POST", "/player-move", null, { 'playerUUID': playerUUID, 'pitIndex':position  });
+       console.log(state);
+       refreshState();
+    }
+
+    function refreshState(state) {
+        if (state == null) {
+            state = JSON.parse(httpSend("GET", "/lobby-state", null, null));
+        }
+        for (let i = 0; i < PITS_TOTAL; ++i) {
+            var pit = document.getElementById("pit" + i);
+            pit.src = "http://localhost:8080/image?name=pit-" + state.pits[i];
+        }
+    }
+
+    // Refresh page on load, you can connect another page (spectator) and see progress
+    window.onload = function() {
+       refreshState();
+    };
+
+    // Refresh page every small interval
+    setInterval(function(){
+       refreshState();
+    }, 500);
+
+</script>
+
+</body>
+</html>

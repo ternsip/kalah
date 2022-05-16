@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Kalah Backend</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <script>
+        function httpGet(theUrl) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+            xmlHttp.send( null );
+            return xmlHttp.responseText;
+        }
+        alert(httpGet(''));
+    </script>
+</head>
+<body>
+
+Welcome to Kalah backend index page!
+<br>
+<a href="/swagger-ui/">Link to swagger</a>
+
+</body>
+</html>
