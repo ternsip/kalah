@@ -1,13 +1,6 @@
-# User-specific stuff:
 .idea/
-
-## File-based project format:
 *.iws
-
-# IntelliJ
 /out/
-
-# mpeltonen/sbt-idea plugin
+build/
 .idea_modules/
-
 .gradle
