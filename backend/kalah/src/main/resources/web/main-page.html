@@ -38,22 +38,36 @@
                 <i id="player-b-name">-</i><br>
                 <i id="score-B">Score:0</i>
             </td>
-            <td rowspan="2" align="center">
+            <td rowspan="2" align="center" class="container">
+                <div class="centered" id="pit13text" style="visibility:hidden;">0</div>
                 <img onclick="makeMove(13);" id="pit13" src="http://localhost:8080/image?name=pit-0" decoding="async" width="32" height="32">
             </td>
-            <td><img onclick="makeMove(12);" id="pit12" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit12text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(12);" id="pit12" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(11);" id="pit11" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit11text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(11);" id="pit11" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(10);" id="pit10" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit10text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(10);" id="pit10" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(9);" id="pit9" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit9text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(9);" id="pit9" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(8);" id="pit8" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit8text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(8);" id="pit8" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(7);" id="pit7" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit7text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(7);" id="pit7" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td rowspan="2" align="center">
+            <td rowspan="2" align="center" class="container">
+                <div class="centered" id="pit6text" style="visibility:hidden;">0</div>
                 <img onclick="makeMove(6);" id="pit6" src="http://localhost:8080/image?name=pit-0" decoding="async" width="32" height="32">
             </td>
             <td rowspan="2" align="center" style="font-size: 8px;">
@@ -63,17 +77,29 @@
             </td>
         </tr>
         <tr>
-            <td><img onclick="makeMove(0);" id="pit0" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit0text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(0);" id="pit0" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(1);" id="pit1" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit1text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(1);" id="pit1" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(2);" id="pit2" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit2text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(2);" id="pit2" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(3);" id="pit3" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit3text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(3);" id="pit3" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(4);" id="pit4" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit4text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(4);" id="pit4" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(5);" id="pit5" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            <td class="container">
+                <div class="centered" id="pit5text" style="visibility:hidden;">0</div>
+                <img onclick="makeMove(5);" id="pit5" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
         </tr>
     </tbody>
@@ -142,7 +168,10 @@
         gameState = state;
         for (let i = 0; i < PITS_TOTAL; ++i) {
             var pit = document.getElementById("pit" + i);
-            pit.src = "http://localhost:8080/image?name=pit-" + state.pits[i];
+            var pitText = document.getElementById("pit" + i + "text");
+            pitText.innerHTML = state.pits[i];
+            pitText.style = (state.pits[i] >= 20) ? "visibility:visible" : "visibility:hidden";
+            pit.src = "http://localhost:8080/image?name=pit-" + ((state.pits[i] >= 20) ? 0 : state.pits[i]);
         }
         document.getElementById("player-a-name").innerHTML = state.playerA == null ? '-' : state.playerA.name;
         document.getElementById("player-b-name").innerHTML = state.playerB == null ? '-' : state.playerB.name;
@@ -221,6 +250,24 @@
     document.getElementById("player-name").value = playerName;
 
 </script>
+
+<style>
+    /* Container holding the image and the text */
+    .container {
+      position: relative;
+      text-align: center;
+      color: white;
+    }
+    /* Centered text */
+    .centered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color:#000000;
+      pointer-events: none;
+    }
+</style>
 
 </body>
 </html>
