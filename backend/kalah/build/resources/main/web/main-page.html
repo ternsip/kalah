@@ -6,62 +6,87 @@
 </head>
 <body>
 
-Welcome to Kalah backend index page!
-<br>
-<a href="/swagger-ui/">Link to swagger</a>
-<br>
-<br>
-<button type="button" onclick="resetLobby()">RESET LOBBY</button>
-<br>
-<br>
-<label for="player-name">Nickname: </label>
-<input type="text" id="player-name" name="name" required minlength="1" maxlength="64" size="30">
-<br>
-<br>
-<button type="button" onclick="assignPlayer()">CONNECT TO THE GAME</button>
+<div align="center">
+    Welcome to Kalah backend index page!
+    <br>
+    <a href="/swagger-ui/">Link to swagger</a>
+    <br>
+    <br>
+    <button type="button" onclick="resetLobby()">RESET LOBBY</button>
+    <label for="number-of-stones">Initial stones [1..6]: </label>
+    <input type="number" id="number-of-stones" required min="1" max="6" size="10" value="6">
+    <br>
+    <br>
+    <label for="player-name">Nickname: </label>
+    <input type="text" id="player-name" name="name" required minlength="1" maxlength="64" size="30">
+    <br>
+    <br>
+    <button type="button" onclick="assignPlayer()">CONNECT TO THE GAME</button>
+</div>
 
 <br>
 <br>
 <br>
 <br>
 
+<div>
 <table align="center" cellspacing="0 cellpadding=" style="border:1px solid #CCC; background:#EEE; border-radius:8px; transform: scale(2.5);">
     <tbody>
         <tr>
-            <label for="player-name">Nickname: </label>
-            <td rowspan="2" align="center"><img onclick="makeMove(13);" id="pit13" alt="Store (0)" src="http://localhost:8080/image?name=pit-0" decoding="async" width="32" height="32"  data-file-width="256" data-file-height="256"></a>
+            <td rowspan="2" align="center" style="font-size: 8px;">
+                <i>PLAYER B</i><br>
+                <i id="player-b-name">-</i><br>
+                <i id="score-B">Score:0</i>
             </td>
-            <td><img onclick="makeMove(12);" id="pit12" alt="0" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td rowspan="2" align="center">
+                <img onclick="makeMove(13);" id="pit13" src="http://localhost:8080/image?name=pit-0" decoding="async" width="32" height="32">
             </td>
-            <td><img onclick="makeMove(11);" id="pit11" alt="2" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(12);" id="pit12" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(10);" id="pit10" alt="1" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(11);" id="pit11" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(9);" id="pit9" alt="2" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(10);" id="pit10" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(8);" id="pit8" alt="3" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(9);" id="pit9" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(7);" id="pit7" alt="5" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(8);" id="pit8" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td rowspan="2" align="center"><img onclick="makeMove(6);" id="pit6" alt="Store (0)" src="http://localhost:8080/image?name=pit-0" decoding="async" width="32" height="32"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(7);" id="pit7" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
+            </td>
+            <td rowspan="2" align="center">
+                <img onclick="makeMove(6);" id="pit6" src="http://localhost:8080/image?name=pit-0" decoding="async" width="32" height="32">
+            </td>
+            <td rowspan="2" align="center" style="font-size: 8px;">
+                <i>PLAYER A</i><br>
+                <i id="player-a-name">-</i><br>
+                <i id="score-A">Score:0</i>
             </td>
         </tr>
         <tr>
-            <td><img onclick="makeMove(0);" id="pit0"  alt="4" src="http://localhost:8080/image?name=pit-5" decoding="async" width="25" height="25" data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(0);" id="pit0" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(1);" id="pit1" alt="3" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(1);" id="pit1" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(2);" id="pit2" alt="0" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(2);" id="pit2" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(3);" id="pit3" alt="1" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(3);" id="pit3" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(4);" id="pit4" alt="2h" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(4);" id="pit4" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
-            <td><img onclick="makeMove(5);" id="pit5" alt="2" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25"  data-file-width="256" data-file-height="256"></a>
+            <td><img onclick="makeMove(5);" id="pit5" src="http://localhost:8080/image?name=pit-6" decoding="async" width="25" height="25">
             </td>
         </tr>
     </tbody>
 </table>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+
+<textarea readonly id='game-log' rows=30 cols=100 autofocus style="display: block;margin-left: auto; margin-right: auto;">
+</textarea>
 
 <script>
 
@@ -69,7 +94,6 @@ Welcome to Kalah backend index page!
     const PITS_TOTAL = PIT_LINE_SIZE * 2 + 2;
     const PIT_SCORE_A_POS = PIT_LINE_SIZE;
     const PIT_SCORE_B_POS = PIT_LINE_SIZE * 2 + 1;
-    const PIT_INITIAL_STONES = 6; // 6, 5, 4, or 3
 
     function httpSend(method, url, data, parameters) {
         var xmlHttp = new XMLHttpRequest();
@@ -77,7 +101,12 @@ Welcome to Kalah backend index page!
         xmlHttp.open(method, url + paramsLine, false); // false for synchronous request
         xmlHttp.setRequestHeader("Content-Type", "application/json");
         xmlHttp.send(data);
-        return xmlHttp.responseText;
+        responseObject = JSON.parse(xmlHttp.responseText);
+        if (xmlHttp.status != 200) {
+            logMessage("Error-" + xmlHttp.status + ":" + responseObject.message);
+            throw responseObject.message;
+        }
+        return responseObject;
     }
 
     function generateUUID() {
@@ -86,36 +115,92 @@ Welcome to Kalah backend index page!
       );
     }
 
-    var playerUUID = generateUUID();
-    var playerName = 'player-' + Math.floor(100 * Math.random());
-    document.getElementById("player-name").value = playerName;
-
     function assignPlayer() {
         playerName = document.getElementById("player-name").value;
         var playerJson = JSON.stringify({ "playerUUID": playerUUID });
         var state = httpSend("POST", "/assign-player", null, { 'playerUUID': playerUUID, 'playerName': playerName });
-        console.log(state);
+        refreshState(state);
     }
 
     function resetLobby() {
-        var state = httpSend("POST", "/lobby-reset", null, null);
-        console.log(state);
+        var initialNumberOfStones = document.getElementById("number-of-stones").value;
+        var state = httpSend("POST", "/lobby-reset", null, {'initialNumberOfStones': initialNumberOfStones});
+        refreshState(state);
     }
 
     function makeMove(position) {
        var state = httpSend("POST", "/player-move", null, { 'playerUUID': playerUUID, 'pitIndex':position  });
-       console.log(state);
-       refreshState();
+       refreshState(state);
     }
 
     function refreshState(state) {
         if (state == null) {
-            state = JSON.parse(httpSend("GET", "/lobby-state", null, null));
+            state = httpSend("GET", "/lobby-state", null, null);
         }
+        if (isDeepEqual(gameState, state)) return;
+        logStateDifference(gameState, state);
+        gameState = state;
         for (let i = 0; i < PITS_TOTAL; ++i) {
             var pit = document.getElementById("pit" + i);
             pit.src = "http://localhost:8080/image?name=pit-" + state.pits[i];
         }
+        document.getElementById("player-a-name").innerHTML = state.playerA == null ? '-' : state.playerA.name;
+        document.getElementById("player-b-name").innerHTML = state.playerB == null ? '-' : state.playerB.name;
+        document.getElementById("score-A").innerHTML = state.pits[PIT_SCORE_A_POS];
+        document.getElementById("score-B").innerHTML = state.pits[PIT_SCORE_B_POS];
+        console.log(gameState);
+    }
+
+    function logStateDifference(oldState, newState) {
+        if (oldState == null) {
+            logMessage('CONNECTED TO LOBBY');
+            return;
+        }
+        if (!isDeepEqual(oldState.playerA, newState.playerA)) {
+            if (newState.playerA == null) logMessage('Player A disconnected');
+            else logMessage('Player A is now: ' + newState.playerA.name);
+        }
+        if (!isDeepEqual(oldState.playerB, newState.playerB)) {
+            if (newState.playerB == null) logMessage('Player B disconnected');
+            else logMessage('Player B is now: ' + newState.playerB.name);
+        }
+        if (oldState.playerTurn != newState.playerTurn) {
+            logMessage(newState.playerTurn + " TURN");
+        }
+        if (oldState.gameStarted != newState.gameStarted && newState.gameStarted) {
+            logMessage("Game has started!");
+            logMessage(newState.playerTurn + " TURN");
+        }
+        if (oldState.playerMove != newState.playerMove) {
+            logMessage(
+                "Player " + newState.playerMove.player.name + " (" + newState.playerMove.playerTurn + ")" +
+                " moved stones from " + newState.playerMove.pitPosition
+            );
+            logMessage(newState.playerTurn + " TURN");
+        }
+        if (oldState.gameFinished != newState.gameFinished && newState.gameFinished) {
+            logMessage("Game has finished!");
+            var scoreA = newState.pits[PIT_SCORE_A_POS];
+            var scoreB = newState.pits[PIT_SCORE_B_POS];
+            if (scoreA > scoreB) {
+                logMessage("Player " + newState.playerA.name + " (A) won!");
+            }
+            if (scoreA < scoreB) {
+                logMessage("Player " + newState.playerB.name + " (B) won!");
+            }
+            if (scoreA == scoreB) {
+                logMessage("DRAW!");
+            }
+            logMessage("SCORE A:B - " + scoreA + ":" + scoreB);
+        }
+    }
+
+    function logMessage(message) {
+        document.getElementById("game-log").innerHTML += message + '\n';
+    }
+
+    function isDeepEqual(objA, objB) {
+        return JSON.stringify(objA) === JSON.stringify(objB);
     }
 
     // Refresh page on load, you can connect another page (spectator) and see progress
@@ -127,6 +212,13 @@ Welcome to Kalah backend index page!
     setInterval(function(){
        refreshState();
     }, 500);
+
+
+    // BEGIN
+    var playerUUID = generateUUID();
+    var playerName = 'player-' + Math.floor(100 * Math.random());
+    var gameState = null;
+    document.getElementById("player-name").value = playerName;
 
 </script>
 

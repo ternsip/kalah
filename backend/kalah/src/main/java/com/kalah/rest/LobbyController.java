@@ -23,8 +23,10 @@ public class LobbyController {
 	}
 
 	@PostMapping("/lobby-reset")
-	public LobbyState lobbyReset() {
-		lobbyService.resetLobbyState();
+	public LobbyState lobbyReset(
+			@RequestParam(name = "initialNumberOfStones") Integer initialNumberOfStones
+	) {
+		lobbyService.resetLobbyState(initialNumberOfStones);
 		return lobbyService.getLobbyState();
 	}
 

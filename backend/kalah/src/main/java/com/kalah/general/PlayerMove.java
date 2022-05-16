@@ -1,12 +1,21 @@
 package com.kalah.general;
 
-public enum PlayerMove {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-    PLAYER_A,
-    PLAYER_B;
+import java.util.UUID;
 
-    public PlayerMove getNextPlayerMove() {
-        return this == PLAYER_A ? PLAYER_B : PLAYER_A;
-    }
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class PlayerMove {
+
+    private Player player;
+    private PlayerTurn playerTurn;
+    private int pitPosition;
+    private UUID moveUUID; // unique id of the move to distinguish
 
 }

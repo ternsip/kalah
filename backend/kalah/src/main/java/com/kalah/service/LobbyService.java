@@ -3,6 +3,7 @@ package com.kalah.service;
 import com.kalah.general.LobbyState;
 import com.kalah.general.Player;
 import com.kalah.general.PlayerMove;
+import com.kalah.general.PlayerTurn;
 import com.kalah.rest.HttpException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static com.kalah.general.PlayerMove.PLAYER_A;
-import static com.kalah.general.PlayerMove.PLAYER_B;
+import static com.kalah.general.PlayerTurn.PLAYER_A;
+import static com.kalah.general.PlayerTurn.PLAYER_B;
 
 @Service
 public class LobbyService {
@@ -20,7 +21,6 @@ public class LobbyService {
     public static final int PITS_TOTAL = PIT_LINE_SIZE * 2 + 2;
     public static final int PIT_SCORE_A_POS = PIT_LINE_SIZE;
     public static final int PIT_SCORE_B_POS = PIT_LINE_SIZE * 2 + 1;
-    public static final int PIT_INITIAL_STONES = 6; // 6, 5, 4, or 3
 
     private final LobbyState lobbyState = new LobbyState();
 
@@ -28,8 +28,15 @@ public class LobbyService {
         return lobbyState;
     }
 
-    public void resetLobbyState() {
-        lobbyState.reset();
+    public void resetLobbyState(int initialNumberOfStones) {
+        if (initialNumberOfStones < 1) {
+            // I know that classical rules allow only 3 stones, but I want even one per pit as minimum
+            throw new HttpException(HttpStatus.BAD_REQUEST, "Number of stones can not be less than 1");
+        }
+        if (initialNumberOfStones > 6) {
+            throw new HttpException(HttpStatus.BAD_REQUEST, "Number of stones can not be more than 6");
+        }
+        lobbyState.reset(initialNumberOfStones);
     }
 
     public void assignPlayer(Player player) {
@@ -44,23 +51,29 @@ public class LobbyService {
         } else {
             lobbyState.setPlayerB(player);
         }
+        if (lobbyState.getPlayerA() != null && lobbyState.getPlayerB() != null) {
+            lobbyState.setGameStarted(true);
+        }
     }
 
     public void makeMove(UUID playerUUID, int sourcePitIndex) {
-        if (lobbyState.getPlayerA() == null || lobbyState.getPlayerB() == null) {
+        if (!lobbyState.isGameStarted()) {
             throw new HttpException(HttpStatus.BAD_REQUEST, "Game cannot start until all players connect");
         }
-        PlayerMove playerMove = lobbyState.getPlayerMove();
-        if (playerMove == PLAYER_A && !lobbyState.getPlayerA().getUuid().equals(playerUUID)) {
+        if (lobbyState.isGameFinished()) {
+            throw new HttpException(HttpStatus.BAD_REQUEST, "Game is finished");
+        }
+        PlayerTurn playerTurn = lobbyState.getPlayerTurn();
+        if (playerTurn == PLAYER_A && !lobbyState.getPlayerA().getUuid().equals(playerUUID)) {
             throw new HttpException(HttpStatus.BAD_REQUEST, "This player can not move stones now");
         }
-        if (playerMove == PLAYER_B && !lobbyState.getPlayerB().getUuid().equals(playerUUID)) {
+        if (playerTurn == PLAYER_B && !lobbyState.getPlayerB().getUuid().equals(playerUUID)) {
             throw new HttpException(HttpStatus.BAD_REQUEST, "This player can not move stones now");
         }
-        if (playerMove == PLAYER_A && (sourcePitIndex < 0 || sourcePitIndex >= PIT_LINE_SIZE)) {
+        if (playerTurn == PLAYER_A && (sourcePitIndex < 0 || sourcePitIndex >= PIT_LINE_SIZE)) {
             throw new HttpException(HttpStatus.BAD_REQUEST, "Player A can move stones only on his line");
         }
-        if (playerMove == PLAYER_B && (sourcePitIndex < PIT_LINE_SIZE + 1 || sourcePitIndex >= 2 * PIT_LINE_SIZE + 1)) {
+        if (playerTurn == PLAYER_B && (sourcePitIndex < PIT_LINE_SIZE + 1 || sourcePitIndex >= 2 * PIT_LINE_SIZE + 1)) {
             throw new HttpException(HttpStatus.BAD_REQUEST, "Player B can move stones only on his line");
         }
         int[] pits = lobbyState.getPits();
@@ -72,19 +85,19 @@ public class LobbyService {
         pits[currentPitIndex] = 0;
         while (stones > 0) {
             currentPitIndex = (currentPitIndex + 1) % pits.length;
-            if (currentPitIndex == PIT_SCORE_A_POS && playerMove == PLAYER_B) {
+            if (currentPitIndex == PIT_SCORE_A_POS && playerTurn == PLAYER_B) {
                 continue; // SKIP OPPONENT SCORE PIT
             }
-            if (currentPitIndex == PIT_SCORE_B_POS && playerMove == PLAYER_A) {
+            if (currentPitIndex == PIT_SCORE_B_POS && playerTurn == PLAYER_A) {
                 continue; // SKIP OPPONENT SCORE PIT
             }
             pits[currentPitIndex]++;
             stones--;
         }
-        boolean playerAFinishedOnSideA = playerMove == PLAYER_A && currentPitIndex < PIT_SCORE_A_POS;
-        boolean playerBFinishedOnSideB = playerMove == PLAYER_B && currentPitIndex > PIT_SCORE_A_POS && currentPitIndex < PIT_SCORE_B_POS;
-        boolean playerAScored = playerMove == PLAYER_A && currentPitIndex == PIT_SCORE_A_POS;
-        boolean playerBScored = playerMove == PLAYER_B && currentPitIndex == PIT_SCORE_B_POS;
+        boolean playerAFinishedOnSideA = playerTurn == PLAYER_A && currentPitIndex < PIT_SCORE_A_POS;
+        boolean playerBFinishedOnSideB = playerTurn == PLAYER_B && currentPitIndex > PIT_SCORE_A_POS && currentPitIndex < PIT_SCORE_B_POS;
+        boolean playerAScored = playerTurn == PLAYER_A && currentPitIndex == PIT_SCORE_A_POS;
+        boolean playerBScored = playerTurn == PLAYER_B && currentPitIndex == PIT_SCORE_B_POS;
         int oppositePitIndex = getOppositePitIndex(currentPitIndex);
         int oppositePitStones = pits[oppositePitIndex];
         if (pits[currentPitIndex] == 1 && playerAFinishedOnSideA && oppositePitStones > 0) {
@@ -101,7 +114,7 @@ public class LobbyService {
         }
         if (!playerAScored && !playerBScored) {
             // change the turn only if there is no condition for double-move
-            lobbyState.setPlayerMove(lobbyState.getPlayerMove().getNextPlayerMove());
+            lobbyState.setPlayerTurn(lobbyState.getPlayerTurn().getNextPlayerMove());
         }
         // CHECK GAME ENDING
         int sumA = 0;
@@ -113,17 +126,19 @@ public class LobbyService {
         if (sumA == 0) {
             pits[PIT_SCORE_B_POS] += sumB;
             Arrays.fill(lobbyState.getPits(), PIT_SCORE_A_POS + 1, PIT_SCORE_B_POS, 0);
-            lobbyState.setGameActive(false);
+            lobbyState.setGameFinished(true);
         }
         if (sumB == 0) {
             pits[PIT_SCORE_A_POS] += sumA;
             Arrays.fill(lobbyState.getPits(), 0, PIT_SCORE_A_POS, 0);
-            lobbyState.setGameActive(false);
+            lobbyState.setGameFinished(true);
         }
+        Player player = lobbyState.getPlayerTurn() == PLAYER_A ? lobbyState.getPlayerA() : lobbyState.getPlayerB();
+        lobbyState.setPlayerMove(new PlayerMove(player, playerTurn, sourcePitIndex, UUID.randomUUID()));
     }
 
     private int getOppositePitIndex(int pitIndex) {
-        return (pitIndex + PIT_LINE_SIZE + 1) % PITS_TOTAL;
+        return PIT_SCORE_B_POS - pitIndex - 1;
     }
 
 }
