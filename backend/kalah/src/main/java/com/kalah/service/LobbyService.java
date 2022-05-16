@@ -138,6 +138,8 @@ public class LobbyService {
     }
 
     private int getOppositePitIndex(int pitIndex) {
+        if (pitIndex == PIT_SCORE_B_POS) return PIT_SCORE_A_POS;
+        if (pitIndex == PIT_SCORE_A_POS) return PIT_SCORE_B_POS;
         return PIT_SCORE_B_POS - pitIndex - 1;
     }
 
